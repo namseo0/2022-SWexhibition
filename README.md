@@ -21,9 +21,8 @@
 ![SW전시회 판넬_어의](https://user-images.githubusercontent.com/52689956/203585742-c57daa84-22ae-47f8-b03c-b3a48716e942.png)
 
 
-
-### 프로젝트 시나리오(초안)
-![캡스톤디자인_프로젝트 시나리오 초안-001 (1)](https://user-images.githubusercontent.com/80818761/190839309-e64ffb38-ce74-425a-97e1-94b5235579af.jpg)
+### 프로젝트 시나리오
+![어의_웹사이트 구조도](https://user-images.githubusercontent.com/52689956/203647304-6a9d27be-4eac-4062-9350-25db7f94bf50.jpg)
 
 
 ###  개발 환경
