@@ -18,7 +18,7 @@
   >
   > 우리는 이 점을 보완하기 위해 불필요한 과정 없이 웹사이트 하나로 재택치료에 필요한 정보를 한번에 찾아볼 수 있도록 하고자 한다. 
   
-  ![소전](https://user-images.githubusercontent.com/52689951/203097569-cd290411-f018-427e-93a8-2d77bffaa1e7.png)
+![SW전시회 판넬_어의](https://user-images.githubusercontent.com/52689956/203585742-c57daa84-22ae-47f8-b03c-b3a48716e942.png)
 
 
 
