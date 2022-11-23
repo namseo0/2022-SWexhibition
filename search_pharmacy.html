@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+
+    <script type="text/javascript"
+        src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=usxa85bak8&amp;submodules = geocoder"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+        integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+
+    <link href="search.css" type="text/css" rel="stylesheet">
+
+    <!--페이지 타이틀 아이콘 삽입-->
+    <link rel="shortcut icon" type="image/x-icon" href="./img/logo.png">
+    <title>어의 | 약국 검색</title>
+</head>
+
+<body>
+    <!--사이트 명, 홈버튼, 로그인 페이지-->
+    <header>
+        <div class="title_main">
+            <div id="title_bg">
+                <div class="title_bar">
+                    <form>
+                        <!--onClick 추가-->
+                        <span><input id="logo" name="logo" type="button" value="HOME"
+                            onClick="location.href='mainPG.html'" /></span>
+                        <span><input id="login" name="login" type="button" value="My Page" 
+                            onClick="location.href='login.html'"/></span>
+                    </form>
+                    <br><br>
+                </div>
+                <div id="title_txt01">재택치료를 위한</div>
+                <div id="title_txt02">위치정보 검색+</div>
+            </div>
+        </div>
+    </header>
+
+    <br>
+
+    <main>
+        <section>
+            <div class="ChoicebtnBlock">
+                <!--버튼으로 변경-->
+<!--ejs에서는 search_파일명.html에서 언더바 _ 랑 .html 지우고 실행하기-->
+                <button type="button" id="hospital" onclick="location.href='search_hospital.html'">병원</button>
+                <button type="button" id="pharmacy" onclick="location.href='search_pharmacy.html'">약국</button>
+                <button type="button" id="pcrCenter" onclick="location.href='search_pcrCenter.html'">선별진료소</button>
+                <button type="button" id="isolation" onclick="location.href='search_isolation.html'">격리시설</button>
+            </div>
+        </section>
+
+        <section>
+            <form action="">
+                <!-- 네이버 지도 관련 자바 스크립트 파일 불러오기 -->
+                <script src="map.js"></script>
+
+                <div class="mapBlock">
+                    <div id="map" style="width : 100%; height:300px;"></div>
+                </div>
+            </form>
+            <!--검색 바 위치 변경 : 지도 위 -> 지도 밑으로 -->
+            <div class="searchBlock">
+                <!--submit , form 변경-->
+                <form action="" method="get">
+                    <input id="searchVal" name="search" type="text" placeholder="검색어를 입력해주세요 ">
+
+                    <!--이미지 소스 삽입  + 앵커 삽입-->
+                    <a href="#map"><input id="btnSearch" name="btnSearch" type="image" src="./img/searchICON.png"
+                            alt="검색"></a>
+                </form>
+            </div>
+
+
+            <div class="arrayBlcok">
+                <select name="arrayhsp" id="arrayhsp">
+                    <span>
+                        <option value="distance">가나다순</option>
+                    </span>
+                    <span>
+                        <option value="related">가까운순</option>
+                    </span>
+                </select>
+
+                <form>
+                    <span><input id="b1" name="location" type="button" value="현재 위치 "></span>
+                </form>
+
+            </div>
+
+            <div class="resBlock">
+                <!--<script>
+
+                    function savewg(hpName, wido, gyeongdo) {
+                        hp = hpName;
+                        wid = wido;
+                        gyd = gyeongdo;
+
+                        var loc = new naver.maps.LatLng(wid, gyd); // 누른버튼의 위도 경도
+
+                        var contentString = [
+                            '<div class="iw_inner">',
+                            '   <h3>' + hp + '</h3>',
+                            '</div>'
+                        ].join('');
+
+                        var infowindow = new naver.maps.InfoWindow({ // 정보창 띄위기
+                            content: contentString
+                        });
+
+                        map.setCenter(loc); // 얻은 좌표를 지도의 중심으로 설정합니다.
+                        map.setZoom(17);
+
+
+                        var marker = new naver.maps.Marker({
+                            position: new naver.maps.LatLng(wid, gyd),
+                            map: map
+                        });
+
+                        infowindow.open(map, marker);
+
+                        naver.maps.Event.addListener(marker, "click", function (e) {
+                            if (infowindow.getMap()) {
+                                infowindow.close();
+                            } else {
+                                infowindow.open(map, marker);
+                            }
+                        })
+                    }
+
+
+                </script> -->
+
+                <form>
+                    <ul id="reslist">
+                        <!--<% for(var i = 0; i<model.length; i++){ %>-->
+                        <li>
+                            <!--id=<%=model[i].id %> onclick='savewg("<%= model[i].병원명%>",<%= model[i].위도 %>,<%= model[i].경도 %>)'>-->
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="./img/pharmacy.jpg">
+                            </div>
+                            <div class="inform">
+                                <span id="name">
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel">
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address">
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+                                <span class="time">평일
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+
+
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <a href="#pop1" class="btn"><input type="button" id="btnReserve" value="배달 예약"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <span>예약 정보를 입력해주세요✍🏻</span>
+                                <div id="popupform">
+                                    <form>
+                                        <table id="reserveTable">
+                                            <tr class="reserveMyData">
+                                                <td class="popupTableKey">이름</td>
+                                                <td class="popupTableValue"><input type="text"></td>
+                                            </tr>
+                                            <tr class="reserveMyData">
+                                                <td class="popupTableKey">연락처</td>
+                                                <td class="popupTableValue"><input type="tel" placeholder="">
+                                                </td>
+                                            </tr>
+                                            <tr class="reserveMyData">
+                                                <td class="popupTableKey">주소</td>
+                                                <td class="popupTableValue">
+                                                    <input type="text" placeholder="">
+                                                </td>
+                                            </tr>
+                                            <tr class="reserveHealth">
+                                                <td class="popupTableKey">증상</td>
+                                                <td><textarea class="popupTableValue" id="health" rows="4" 
+                                                    placeholder=""></textarea></td>
+                                            </tr>
+                                            <tr class="reserveDate"> <!--날짜 입력 폼-->
+                                                <td class="popupTableKey">희망 날짜</td class="popupTableValue">
+                                                <td><input type="date" class="popupTableValue" id="reserveDate"></td> 
+                                                <script>
+                                                    document.getElementById('reserveDate').value = new Date().toISOString().substring(0, 10);
+                                                </script> <!--현재 날짜를 기본값으로-->
+                                            </tr>
+                                            <tr class="reserveDate"> <!--진료 희망시간 선택 - 라디오버튼-->
+                                                <td class="popupTableKey">희망 시간대</td>
+                                                <td><input type="text" placeholder="30분 단위로 작성해주세요 :)">
+                                                    <!--<div class="reserveTime">
+                                                        <input type="checkbox" id="t0900" name="time"><label for="t0900">09:00</label>
+                                                        <input type="checkbox" id="t0930" name="time"><label for="t0930">09:30</label>
+                                                        <input type="checkbox" id="t1000" name="time"><label for="t1000">10:00</label>
+                                                        <input type="checkbox" id="t1030" name="time"><label for="t1030">10:30</label>
+                                                        <input type="checkbox" id="t1100" name="time"><label for="t1100">11:00</label>
+                                                        <input type="checkbox" id="t1130" name="time"><label for="t1130">11:30</label>
+                                                        <input type="checkbox" id="t1400" name="time"><label for="t1400">14:00</label>
+                                                        <input type="checkbox" id="t1430" name="time"><label for="t1430">14:30</label>
+                                                        <input type="checkbox" id="t1500" name="time"><label for="t1500">15:00</label>
+                                                        <input type="checkbox" id="t1530" name="time"><label for="t1530">15:30</label>
+                                                        <input type="checkbox" id="t1600" name="time"><label for="t1600">16:00</label>
+                                                        <input type="checkbox" id="t1630" name="time"><label for="t1630">16:30</label>
+                                                    </div>-->
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                        <a href="#a"><input id="btnClose" type="button" value="취소"></a>
+                                        <input id="btnSub" type="submit" value="예약하기" onclick="btnSub_OnClick()" onClick="location.href='#a'"></a>
+                                        <script>
+                                            function btnSub_OnClick() {
+                                                alert("예약이 접수되었습니다.");
+                                                window.location.href = "#a";
+                                            }
+                                        </script>
+                                    </form>
+
+                                </div>
+
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+<!---여기부터 아래 표시한 곳까지 지워주기 (테스트를 위해 만들었던 것들임!)-->
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교 ddddddddddd
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 춘천시 한림대학길1
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 123456번fffefㅁ더랴더랻저럊ㅁ더럄더럄젇랴ㅓ랴지ㅓ디ㅑ절먀ㅣ더fffffffffffffffffffffff지
+                                    301호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교부속 성심병원
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 춘천시 한림대학길1 학생생활관 1관 906호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 123456번지 301호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교 d러ㅐ댜ㅓ래ㅑㅓㅁㄹ
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 춘천시 한림대학길1 학생생활관 1관 906호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교 ddddddddddd
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 춘천시 한림대학길1
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 123456번fffefㅁ더랴더랻저럊ㅁ더럄더럄젇랴ㅓ랴지ㅓ디ㅑ절먀ㅣ더fffffffffffffffffffffff지
+                                    301호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교부속 성심병원
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 춘천시 한림대학길1 학생생활관 1관 906호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 123456번지 301호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+                        <li>
+                            <div>
+                                <img id="img" name="사진" alt="사진" src="">
+                            </div>
+                            <div class="inform">
+                                <span id="name">한림대학교 d러ㅐ댜ㅓ래ㅑㅓㅁㄹ
+                                    <!--<%= model[i].병원명 %>-->
+                                </span>
+                                <span id="tel"> | 033-123-4567
+                                    <!--<%= model[i].전화번호 %>-->
+                                </span>
+                                <span id="address"> 강원도 춘천시 한림대학길1 학생생활관 1관 906호
+                                    <!--<%= model[i].주소 %>-->
+                                </span>
+
+
+                                <span class="time">평일 08:30-18:00
+                                    <!--<%= model[i].평일운영시간 %>-->
+                                </span>
+                                <span class="time">토요일 08:30-18:00
+                                    <!--<%= model[i].토요일운영시간 %>-->
+                                </span>
+                                <span class="time">일요일 08:30-18:00
+                                    <!--<%= model[i].일요일운영시간 %>-->
+                                </span>
+                            </div>
+
+                            <!--예약 버튼 클릭 시 예약 팝업창 뜨도록-->
+                            <input type="button" id="btnReserve" value="예약 하기"><a href="#pop1" class="btn"></a>
+
+                            <!--가려질 부분 / opacity : 0-->
+                            <div class="popup" id="pop1">
+                                <a href="#a">닫기</a>
+                            </div>
+                            <div class="dim">
+
+                            </div>
+                            <!--여기까지-->
+                        </li>
+
+                        <!----여기까지 지우면 돼용------------------------------------->
+                        <!--<span><input name="add" type="button" value="더보기"></span>-->
+                    </ul>
+                    <p style=clear:both;></p>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <!--사이트 정보-->
+        <div class="footer_info">
+            <div id="footer-left">
+                <div class="footer_title">Project</div>
+                <div><img id="logomean" src="./img/logo+mean.png"></div>
+                <div>2022-2 Capstone Design</div>
+                <div>Project EOUI</div>
+            </div>
+            <div id="footer-center">
+                <div class="footer_title">Program</div>
+                <div>Tool | Visual Studio Code</div>
+                <div>Front-end | HTML, CSS, JavaScript</div>
+                <div>Back-end | Nodejs, SQLite3, jQuery, Express</div>
+                <div>UI,UX | Photoshop, Illustrator, Figma</div>
+                <div>API | Naver Map</div>
+            </div>
+            <div id="footer-right">
+                <div class="footer_title">Team </div>
+                <div>
+                    <span><img src="./img/t_go.png"></span> 
+                    <span>빅데이터 19 고은영</span>
+                </div>
+                <div>
+                    <span><img src="./img/t_kim.png"></span> 
+                    <span>빅데이터 19 김유진</span>
+                </div>
+                <div>
+                    <span><img src="./img/t_nam.png"></span> 
+                    <span>콘텐츠IT 19 남서영</span>
+                </div>
+            </div>    
+        </div>
+        <div id="footer-bottom">
+            @2022-2 Capstone Design Made by Team Homehealer
+        </div>
+    </footer>
+</body>
+
+</html>
