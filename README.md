@@ -32,7 +32,12 @@
 - UI,UX : Photoshop, Illustrator, Figma
 - API : Naver Map 
 
-# 3. 실행화면
+# 3. 실행화면   
+
+### 실행 동영상
+https://user-images.githubusercontent.com/52689956/205467901-5196b6f7-51ec-490b-9fa2-17f43bed7c20.mp4
+
+
 ### 메인화면
 ![어의-어디서든-의사와-연결해주는-웹-서비스](https://user-images.githubusercontent.com/52689951/203469807-b41e61f9-4e34-43ba-8761-6df7dc73c6c7.png)
 
